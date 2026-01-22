@@ -1,0 +1,50 @@
+{
+  "event_id": "eh_demo_001",
+  "created_at": "2026-01-22T18:00:00Z",
+  "event_type": "EXPORT_CONTROL",
+  "lifecycle_stage": "CredibleDraft",
+  "category": "Trade_Tariffs_ExportControls",
+  "jurisdiction": {
+    "country": "US",
+    "region": "Federal",
+    "agency": "Commerce",
+    "legislative_body": null
+  },
+  "title": "Draft expansion of export licensing for advanced AI chips to targeted entities",
+  "summary": "A credible draft indicates expanded licensing requirements for advanced AI accelerators and related semiconductor items to specific entities.",
+  "dates": {
+    "announced_at": "2026-01-22",
+    "effective_date": null,
+    "comment_deadline": null,
+    "enforcement_start": null
+  },
+  "trade": {
+    "measure_type": "EXPORT_CONTROL",
+    "products": ["advanced chips", "AI accelerators"],
+    "hs_codes": [],
+    "countries_involved": {
+      "imposing": ["US"],
+      "targeted": ["CN"]
+    },
+    "rate_change": null,
+    "effective_window": {
+      "start": null,
+      "end": null
+    },
+    "compliance_requirements": ["license_required", "end-use screening"],
+    "exceptions": []
+  },
+  "evidence": [
+    {
+      "source_type": "demo",
+      "publisher": "Event Horizon Demo",
+      "url": "https://example.com/demo",
+      "published_at": "2026-01-22T18:00:00Z",
+      "extracted_claims": [],
+      "reliability": 0.75
+    }
+  ],
+  "tags": ["export-control", "semiconductors", "ai-chips"],
+  "status": "ACTIVE"
+}
+

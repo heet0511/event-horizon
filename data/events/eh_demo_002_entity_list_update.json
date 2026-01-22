@@ -1,0 +1,27 @@
+{
+  "event_id": "eh_demo_002",
+  "created_at": "2026-01-22T19:00:00Z",
+  "event_type": "EXPORT_CONTROL",
+  "lifecycle_stage": "Adopted",
+  "category": "Trade_Tariffs_ExportControls",
+  "jurisdiction": { "country": "US", "region": "Federal", "agency": "Commerce", "legislative_body": null },
+  "title": "Entity list update adds semiconductor-related organizations",
+  "summary": "An adopted update adds specific organizations to an entity list, increasing screening requirements and blocking certain transactions.",
+  "dates": { "announced_at": "2026-01-22", "effective_date": "2026-01-25", "comment_deadline": null, "enforcement_start": "2026-01-25" },
+  "trade": {
+    "measure_type": "ENTITY_LIST",
+    "products": ["semiconductor tools", "advanced chips"],
+    "hs_codes": [],
+    "countries_involved": { "imposing": ["US"], "targeted": ["CN"] },
+    "rate_change": null,
+    "effective_window": { "start": "2026-01-25", "end": null },
+    "compliance_requirements": ["end-user screening", "blocked entities checks"],
+    "exceptions": []
+  },
+  "evidence": [
+    { "source_type": "demo", "publisher": "Event Horizon Demo", "url": "https://example.com/demo", "published_at": "2026-01-22T19:00:00Z", "extracted_claims": [], "reliability": 0.75 }
+  ],
+  "tags": ["entity-list", "screening", "semiconductors"],
+  "status": "ACTIVE"
+}
+

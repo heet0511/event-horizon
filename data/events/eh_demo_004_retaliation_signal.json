@@ -1,0 +1,27 @@
+{
+  "event_id": "eh_demo_004",
+  "created_at": "2026-01-22T21:00:00Z",
+  "event_type": "RETALIATION_SIGNAL",
+  "lifecycle_stage": "Draft",
+  "category": "Trade_Tariffs_ExportControls",
+  "jurisdiction": { "country": "CN", "region": "National", "agency": "MOFCOM", "legislative_body": null },
+  "title": "Draft retaliation signal suggests potential restrictions on critical semiconductor inputs",
+  "summary": "A draft signal suggests potential export restrictions on upstream semiconductor inputs, raising supply chain risk and prompting inventory behavior.",
+  "dates": { "announced_at": "2026-01-22", "effective_date": null, "comment_deadline": null, "enforcement_start": null },
+  "trade": {
+    "measure_type": "RETALIATION_SIGNAL",
+    "products": ["critical semiconductor inputs", "advanced materials"],
+    "hs_codes": [],
+    "countries_involved": { "imposing": ["CN"], "targeted": ["US"] },
+    "rate_change": null,
+    "effective_window": { "start": null, "end": null },
+    "compliance_requirements": [],
+    "exceptions": []
+  },
+  "evidence": [
+    { "source_type": "demo", "publisher": "Event Horizon Demo", "url": "https://example.com/demo", "published_at": "2026-01-22T21:00:00Z", "extracted_claims": [], "reliability": 0.65 }
+  ],
+  "tags": ["retaliation", "inputs", "supply-chain"],
+  "status": "ACTIVE"
+}
+

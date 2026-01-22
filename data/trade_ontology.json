@@ -1,0 +1,145 @@
+{
+  "module": "Trade_Tariffs_ExportControls",
+  "version": "1.0",
+  "focus_lane": "Semiconductors_ExportControls",
+  "event_types": [
+    {
+      "id": "EXPORT_CONTROL",
+      "description": "Licensing requirements, bans, entity lists, end-use restrictions on chips, EDA, semiconductor equipment."
+    },
+    {
+      "id": "SANCTIONS_UPDATE",
+      "description": "Sector/entity sanctions affecting financing, trade, insurance, payments."
+    },
+    {
+      "id": "TARIFF_ANNOUNCEMENT",
+      "description": "New/changed tariffs affecting semiconductor-related imports/exports."
+    },
+    {
+      "id": "IMPORT_RESTRICTION",
+      "description": "Quotas/embargoes/port restrictions affecting semiconductor supply routes."
+    },
+    {
+      "id": "CUSTOMS_ENFORCEMENT",
+      "description": "Enforcement actions like seizures, compliance crackdowns, heightened scrutiny."
+    },
+    {
+      "id": "RETALIATION_SIGNAL",
+      "description": "Official signals of retaliatory measures impacting supply chains."
+    }
+  ],
+  "policy_stages": ["Signal", "Draft", "CredibleDraft", "Adopted", "Enforced", "Amended", "Expired"],
+  "trade_objects": {
+    "product_categories": [
+      {
+        "id": "ADVANCED_CHIPS",
+        "keywords": ["advanced chip", "gpu", "ai accelerator", "high-performance computing", "hpc", "data center gpu", "node 7nm", "5nm", "3nm"],
+        "sectors": ["Semiconductors", "DataCenter", "AI_Infrastructure"]
+      },
+      {
+        "id": "SEMICONDUCTOR_EQUIPMENT",
+        "keywords": ["lithography", "etch", "deposition", "metrology", "EUV", "DUV", "wafer fab equipment", "WFE", "inspection"],
+        "sectors": ["SemiconductorEquipment", "IndustrialTech"]
+      },
+      {
+        "id": "EDA_SOFTWARE",
+        "keywords": ["EDA", "electronic design automation", "IC design software", "chip design tools", "verification", "place and route"],
+        "sectors": ["Software", "Semiconductors"]
+      },
+      {
+        "id": "ADVANCED_PACKAGING",
+        "keywords": ["advanced packaging", "CoWoS", "HBM", "chiplets", "interposer", "substrate", "OSAT"],
+        "sectors": ["Semiconductors", "SupplyChain"]
+      },
+      {
+        "id": "MEMORY_HBM",
+        "keywords": ["HBM", "high bandwidth memory", "DRAM", "advanced memory"],
+        "sectors": ["Semiconductors", "AI_Infrastructure"]
+      }
+    ],
+    "restriction_mechanisms": [
+      {
+        "id": "LICENSE_REQUIRED",
+        "mechanism": "Export requires license; creates friction, delays, uncertainty",
+        "first_order_effects": ["shipment delays", "revenue at risk for exporters", "compliance spend increase"],
+        "second_order_effects": ["supplier substitution", "inventory hoarding", "capex reprioritization"]
+      },
+      {
+        "id": "FULL_BAN",
+        "mechanism": "Exports prohibited to targeted region/entities",
+        "first_order_effects": ["direct revenue loss", "supply shock downstream"],
+        "second_order_effects": ["redesign cycles", "domestic substitution programs", "gray-market risk (avoid encouraging)"]
+      },
+      {
+        "id": "END_USE_END_USER",
+        "mechanism": "Restrictions based on end use (military/AI) or end user",
+        "first_order_effects": ["customer screening required", "sales funnel slowdown"],
+        "second_order_effects": ["shift to compliant customers", "product segmentation", "region strategy changes"]
+      },
+      {
+        "id": "ENTITY_LIST",
+        "mechanism": "Named entities restricted; expands compliance obligations across suppliers",
+        "first_order_effects": ["blocked transactions", "contract renegotiations"],
+        "second_order_effects": ["network effects across suppliers", "demand shifts to non-listed players"]
+      }
+    ],
+    "impact_templates": [
+      {
+        "id": "TEMPLATE_EXPORT_CONTROL_SEMI",
+        "applies_to_event_types": ["EXPORT_CONTROL", "SANCTIONS_UPDATE"],
+        "pattern": "Restriction on {product_category} exports from {imposing_country} to {targeted_country/entities}",
+        "causal_chain": [
+          "Supply restriction / licensing friction",
+          "Lead times increase + uncertainty",
+          "Downstream production constraints",
+          "Capex + sourcing shifts"
+        ],
+        "winner_archetypes": [
+          "Alternative-country suppliers not restricted",
+          "Domestic suppliers supported by industrial policy",
+          "Compliance/GRC tooling providers",
+          "Substitute technology providers (if viable)"
+        ],
+        "loser_archetypes": [
+          "Exporters with high revenue exposure to targeted region",
+          "Downstream manufacturers dependent on restricted inputs",
+          "Firms with concentrated supplier base"
+        ],
+        "time_horizon_days_default": [7, 180]
+      },
+      {
+        "id": "TEMPLATE_ENTITY_LIST",
+        "applies_to_event_types": ["EXPORT_CONTROL", "SANCTIONS_UPDATE"],
+        "pattern": "Entity list update affecting {named_entities}",
+        "causal_chain": [
+          "Transaction screening + blocked counterparties",
+          "Order cancellations / renegotiations",
+          "Supplier network disruption",
+          "Demand redistribution"
+        ],
+        "winner_archetypes": ["Competitors serving similar demand", "Compliance tooling", "Non-affected distributors"],
+        "loser_archetypes": ["Suppliers with direct contracts", "Partners with joint ventures", "Banks/insurers exposed"],
+        "time_horizon_days_default": [3, 120]
+      }
+    ]
+  },
+  "confidence_model": {
+    "components": {
+      "source_reliability": { "weight": 0.30 },
+      "multi_source_corroboration": { "weight": 0.20 },
+      "text_clarity": { "weight": 0.15 },
+      "stage_weight": { "weight": 0.20 },
+      "historical_analog_strength": { "weight": 0.15 }
+    },
+    "stage_weights": {
+      "Signal": 0.35,
+      "Draft": 0.50,
+      "CredibleDraft": 0.65,
+      "Adopted": 0.80,
+      "Enforced": 0.90,
+      "Amended": 0.70,
+      "Expired": 0.10
+    }
+  }
+}
+

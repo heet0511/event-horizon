@@ -1,0 +1,97 @@
+{
+  "universe_id": "EH_SEMI_V1",
+  "version": "1.0",
+  "companies": [
+    {
+      "ticker": "NVDA",
+      "name": "NVIDIA",
+      "sectors": ["Semiconductors", "AI_Infrastructure"],
+      "tags": ["export-sensitive", "ai-accelerators", "data-center"],
+      "jurisdiction_exposure": ["US", "CN"],
+      "keywords": ["gpu", "ai accelerator", "data center"],
+      "notes": "High sensitivity to advanced chip export controls."
+    },
+    {
+      "ticker": "AMD",
+      "name": "Advanced Micro Devices",
+      "sectors": ["Semiconductors"],
+      "tags": ["export-sensitive", "cpus", "gpus"],
+      "jurisdiction_exposure": ["US", "CN"],
+      "keywords": ["cpu", "gpu", "data center"],
+      "notes": "Potential exposure via data center GPU/CPU restrictions."
+    },
+    {
+      "ticker": "ASML",
+      "name": "ASML Holding",
+      "sectors": ["SemiconductorEquipment"],
+      "tags": ["export-sensitive", "lithography", "critical-tooling"],
+      "jurisdiction_exposure": ["EU", "US", "CN"],
+      "keywords": ["EUV", "DUV", "lithography"],
+      "notes": "Equipment export restrictions are high-impact."
+    },
+    {
+      "ticker": "AMAT",
+      "name": "Applied Materials",
+      "sectors": ["SemiconductorEquipment"],
+      "tags": ["export-sensitive", "wafer-fab-equipment"],
+      "jurisdiction_exposure": ["US", "CN"],
+      "keywords": ["etch", "deposition", "WFE"],
+      "notes": "Broad WFE exposure to licensing regimes."
+    },
+    {
+      "ticker": "LRCX",
+      "name": "Lam Research",
+      "sectors": ["SemiconductorEquipment"],
+      "tags": ["export-sensitive", "wafer-fab-equipment"],
+      "jurisdiction_exposure": ["US", "CN"],
+      "keywords": ["etch", "deposition"],
+      "notes": "Similar exposure pattern to WFE controls."
+    },
+    {
+      "ticker": "KLAC",
+      "name": "KLA Corporation",
+      "sectors": ["SemiconductorEquipment"],
+      "tags": ["export-sensitive", "metrology", "inspection"],
+      "jurisdiction_exposure": ["US", "CN"],
+      "keywords": ["inspection", "metrology", "process control"],
+      "notes": "Metrology tools often included in advanced node controls."
+    },
+    {
+      "ticker": "SNPS",
+      "name": "Synopsys",
+      "sectors": ["Software", "Semiconductors"],
+      "tags": ["eda", "export-sensitive"],
+      "jurisdiction_exposure": ["US", "CN"],
+      "keywords": ["EDA", "chip design", "verification"],
+      "notes": "EDA export controls can hit licensing and customer base."
+    },
+    {
+      "ticker": "CDNS",
+      "name": "Cadence Design Systems",
+      "sectors": ["Software", "Semiconductors"],
+      "tags": ["eda", "export-sensitive"],
+      "jurisdiction_exposure": ["US", "CN"],
+      "keywords": ["EDA", "design tools", "IC design"],
+      "notes": "EDA tooling often appears in policy discussions."
+    },
+    {
+      "ticker": "TSM",
+      "name": "Taiwan Semiconductor Manufacturing",
+      "sectors": ["Semiconductors", "Foundry"],
+      "tags": ["supply-chain-central", "advanced-nodes"],
+      "jurisdiction_exposure": ["TW", "US", "CN"],
+      "keywords": ["foundry", "5nm", "3nm", "advanced packaging"],
+      "notes": "Second-order effects via customer mix + compliance."
+    },
+    {
+      "ticker": "INTC",
+      "name": "Intel",
+      "sectors": ["Semiconductors", "Foundry"],
+      "tags": ["domestic-substitute", "industrial-policy-beneficiary"],
+      "jurisdiction_exposure": ["US", "EU", "CN"],
+      "keywords": ["foundry", "cpu", "manufacturing", "ai", "accelerator", "advanced packaging"],
+      "notes": "May benefit from reshoring/industrial policy second-order effects."
+    }
+  ]
+}
+

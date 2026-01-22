@@ -1,0 +1,27 @@
+{
+  "event_id": "eh_demo_005",
+  "created_at": "2026-01-22T22:00:00Z",
+  "event_type": "CUSTOMS_ENFORCEMENT",
+  "lifecycle_stage": "Enforced",
+  "category": "Trade_Tariffs_ExportControls",
+  "jurisdiction": { "country": "US", "region": "Federal", "agency": "Customs", "legislative_body": null },
+  "title": "Enforcement surge increases end-use checks for advanced computing shipments",
+  "summary": "An enforcement surge increases screening and audits for end-use compliance, raising shipping friction and compliance workload for exporters.",
+  "dates": { "announced_at": "2026-01-22", "effective_date": "2026-01-22", "comment_deadline": null, "enforcement_start": "2026-01-22" },
+  "trade": {
+    "measure_type": "CUSTOMS_ENFORCEMENT",
+    "products": ["advanced computing", "AI accelerators"],
+    "hs_codes": [],
+    "countries_involved": { "imposing": ["US"], "targeted": ["CN"] },
+    "rate_change": null,
+    "effective_window": { "start": "2026-01-22", "end": null },
+    "compliance_requirements": ["enhanced screening", "audit-ready documentation"],
+    "exceptions": []
+  },
+  "evidence": [
+    { "source_type": "demo", "publisher": "Event Horizon Demo", "url": "https://example.com/demo", "published_at": "2026-01-22T22:00:00Z", "extracted_claims": [], "reliability": 0.8 }
+  ],
+  "tags": ["enforcement", "screening", "compliance"],
+  "status": "ACTIVE"
+}
+
