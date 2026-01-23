@@ -1,3 +1,4 @@
+# src/app.py
 import json
 import subprocess
 import textwrap
@@ -5,7 +6,6 @@ from pathlib import Path
 
 import pandas as pd
 import streamlit as st
-import graphviz
 
 ROOT = Path(__file__).resolve().parents[1]
 OUT = ROOT / "outputs"
@@ -19,11 +19,15 @@ st.set_page_config(page_title="Event Horizon (v1)", layout="wide")
 
 st.title("Event Horizon (v1)")
 st.caption(
-    "Policy → Market Impact Intelligence (Demo). Explainable exposure ranking — not financial advice."
+    "Policy → Market Impact Intelligence. Explainable exposure ranking — not financial advice."
 )
 
 
+# ----------------------------
+# Helpers
+# ----------------------------
 def run_cmd(cmd: list[str]) -> tuple[int, str]:
+    """Run a command from repo root and capture stdout+stderr."""
     p = subprocess.run(cmd, cwd=str(ROOT), capture_output=True, text=True)
     out = (p.stdout or "") + ("\n" + p.stderr if p.stderr else "")
     return p.returncode, out.strip()
@@ -34,6 +38,7 @@ def load_json(path: Path):
 
 
 def graph_to_dot(graph: dict) -> str:
+    """Convert our graph JSON {nodes:[{id,label}], edges:[{from,to}]} to DOT."""
     lines = [
         "digraph G {",
         'rankdir="LR";',
@@ -43,11 +48,10 @@ def graph_to_dot(graph: dict) -> str:
     ]
 
     for n in graph.get("nodes", []):
-        # Wrap long labels across multiple lines for readability
         label = (n.get("label") or "").strip()
         label_wrapped = "\n".join(textwrap.wrap(label, width=28))
 
-        # Cap to ~4 lines so nodes don't get too tall
+        # cap to ~4 lines
         if label_wrapped.count("\n") > 3:
             parts = label_wrapped.split("\n")[:4]
             parts[-1] = (parts[-1][:25] + "...") if len(parts[-1]) > 25 else (parts[-1] + "…")
@@ -63,38 +67,98 @@ def graph_to_dot(graph: dict) -> str:
     return "\n".join(lines)
 
 
-# ---- Sidebar controls ----
+# ----------------------------
+# Sidebar controls
+# ----------------------------
 with st.sidebar:
     st.header("Controls")
 
-    if st.button("Run pipeline (batch + report)", type="primary"):
-        st.write("Running…")
-        code1, out1 = run_cmd(["python3", "-m", "src.run_batch"])
-        code2, out2 = run_cmd(["python3", "-m", "src.generate_report"])
-        st.text_area("Batch output", out1, height=140)
-        st.text_area("Report output", out2, height=120)
-        if code1 == 0 and code2 == 0:
-            st.success("Pipeline complete.")
-        else:
-            st.error("Pipeline failed. Scroll output for details.")
+    # This "Idle/Running" is purely UI; it will not get stuck unless you keep writing to it.
+    status = st.empty()
+    status.caption("Idle")
 
-        st.divider()
+    source = st.radio("Data source", ["Demo (local JSON)", "Live RSS"], index=0)
 
+    rss_url = ""
+    max_events = 6
+    if source == "Live RSS":
+        rss_url = st.text_input(
+            "RSS URL",
+            value="",
+            placeholder="Paste an RSS/Atom feed URL…",
+        )
+        max_events = st.slider("Max items", 3, 15, 6)
+
+    run_clicked = st.button("Run pipeline (batch + report)", type="primary")
+
+    st.divider()
     st.caption("Outputs expected: feed.json + REPORT.md")
 
+# If user clicks, run batch + report
+if run_clicked:
+    status.info("Running…")
 
-# ---- Main: Load feed ----
+    if source == "Live RSS":
+        if not rss_url.strip():
+            status.error("Paste an RSS URL first.")
+        else:
+            cmd1 = [
+                "python3",
+                "-m",
+                "src.run_batch",
+                "--source",
+                "rss",
+                "--rss-url",
+                rss_url.strip(),
+                "--max-events",
+                str(max_events),
+            ]
+            code1, out1 = run_cmd(cmd1)
+            code2, out2 = run_cmd(["python3", "-m", "src.generate_report"])
+
+            with st.sidebar:
+                st.text_area("Batch output", out1, height=160)
+                st.text_area("Report output", out2, height=120)
+
+            if code1 == 0 and code2 == 0:
+                status.success("Pipeline complete.")
+            else:
+                status.error("Pipeline failed. Scroll output for details.")
+    else:
+        cmd1 = ["python3", "-m", "src.run_batch", "--source", "demo"]
+        code1, out1 = run_cmd(cmd1)
+        code2, out2 = run_cmd(["python3", "-m", "src.generate_report"])
+
+        with st.sidebar:
+            st.text_area("Batch output", out1, height=160)
+            st.text_area("Report output", out2, height=120)
+
+        if code1 == 0 and code2 == 0:
+            status.success("Pipeline complete.")
+        else:
+            status.error("Pipeline failed. Scroll output for details.")
+
+
+# ----------------------------
+# Main: Load feed
+# ----------------------------
 if not FEED_PATH.exists():
-    st.warning(
-        "No outputs/feed.json yet. Click **Run pipeline (batch + report)** in the sidebar."
-    )
+    st.warning("No outputs/feed.json yet. Click **Run pipeline** in the sidebar.")
     st.stop()
 
 feed = load_json(FEED_PATH)
-
-# --- KPI cards ---
 df_all = pd.DataFrame(feed)
 
+required_cols = {"event_id", "title", "type", "stage", "confidence"}
+if df_all.empty or not required_cols.issubset(df_all.columns):
+    c1, c2, c3 = st.columns(3)
+    c1.metric("Events", 0)
+    c2.metric("Avg confidence", f"{0.000:.3f}")
+    c3.metric("Top confidence", f"{0.000:.3f}", help="Event: —")
+    st.warning("Feed is empty (or missing required fields). Click **Run pipeline** in the sidebar.")
+    st.stop()
+
+# KPI cards
 c1, c2, c3 = st.columns(3)
 c1.metric("Events", len(df_all))
 
@@ -108,10 +172,11 @@ c3.metric("Top confidence", f"{top_conf:.3f}", help=f"Event: {top_event}")
 
 st.divider()
 
-# Feed table
+# ----------------------------
+# Feed table + filters
+# ----------------------------
 st.subheader("Feed")
 
-# --- Filters ---
 f1, f2, f3 = st.columns([1, 1, 2])
 types = ["All"] + sorted(df_all["type"].dropna().unique().tolist())
 stages = ["All"] + sorted(df_all["stage"].dropna().unique().tolist())
@@ -128,7 +193,6 @@ if stage_choice != "All":
 if query.strip():
     df_show = df_show[df_show["title"].str.contains(query.strip(), case=False, na=False)]
 
-# Show table
 if not df_show.empty:
     st.dataframe(
         df_show[["event_id", "type", "stage", "confidence", "title"]],
@@ -138,16 +202,19 @@ if not df_show.empty:
 else:
     st.info("No events match your filters.")
 
-# Pick event
 event_ids = df_show["event_id"].tolist() if not df_show.empty else df_all["event_id"].tolist()
 selected = st.selectbox("Select an event", event_ids, index=0)
 
-# ---- Event detail ----
+st.divider()
+
+# ----------------------------
+# Event detail
+# ----------------------------
 st.subheader(f"Event Detail: {selected}")
 
 col1, col2 = st.columns([1, 1])
 
-# Alert text
+# Alert
 alert_path = ALERTS_DIR / f"{selected}.txt"
 with col1:
     st.markdown("### Alert")
@@ -156,25 +223,30 @@ with col1:
     else:
         st.info("Alert file missing. Run the pipeline.")
 
-# Rankings table
+# Rankings
 ranking_path = RANKINGS_DIR / f"{selected}_ranked.json"
 with col2:
     st.markdown("### Ranked Impacts")
     if ranking_path.exists():
         ranked = load_json(ranking_path)
         rdf = pd.DataFrame(ranked)
-        if not rdf.empty:
+
+        # Guard if rss returns a slightly different shape
+        want_cols = ["ticker", "company_name", "direction", "exposure_score", "confidence"]
+        show_cols = [c for c in want_cols if c in rdf.columns]
+
+        if not rdf.empty and show_cols:
             st.dataframe(
-                rdf[
-                    ["ticker", "company_name", "direction", "exposure_score", "confidence"]
-                ].head(15),
+                rdf[show_cols].head(15),
                 use_container_width=True,
                 hide_index=True,
             )
+        else:
+            st.info("Ranking file exists but is empty or missing expected fields.")
     else:
         st.info("Ranking file missing. Run the pipeline.")
 
-# Impact Graph (visual)
+# Graph
 graph_path = GRAPHS_DIR / f"{selected}_graph.json"
 st.markdown("### Impact Graph")
 st.caption("EVENT → MECHANISM → SUPPLY → EFFECT → COMPANY EXPOSURE")
@@ -190,7 +262,9 @@ else:
 
 st.divider()
 
-# Report (render)
+# ----------------------------
+# Compiled report
+# ----------------------------
 st.subheader("Compiled Report")
 if REPORT_PATH.exists():
     report_md = REPORT_PATH.read_text(encoding="utf-8")

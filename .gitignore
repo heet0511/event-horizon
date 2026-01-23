@@ -1,6 +1,17 @@
+# Python
 __pycache__/
 *.pyc
-.DS_Store
-outputs/
 .venv/
-env/
+venv/
+.env
+
+# OS / IDE
+.DS_Store
+.vscode/
+.idea/
+
+# Streamlit
+.streamlit/
+
+# Outputs (generated)
+outputs/
